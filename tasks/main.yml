@@ -1,0 +1,53 @@
+# tasks file for systemd
+---
+- name: include variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "_{{ ansible_distribution_release }}.yml"
+    - "_{{ ansible_distribution | lower }}.yml"
+    - _default.yml
+  tags:
+    - configuration
+    - systemd
+    - systemd-include-variables
+
+- name: install
+  apt:
+    name: "{{ item }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: "{{ systemd_dependencies }}"
+  tags:
+    - configuration
+    - systemd
+    - systemd-install
+
+- name: update specific configuration files
+  template:
+    src: etc/systemd.d/systemd.j2
+    dest: "/etc/systemd.d/{{ item.key }}"
+    validate: "visudo -cf %s"
+    owner: root
+    group: root
+    mode: 0440
+  with_dict: "{{ systemd_systemd_d_files }}"
+  tags:
+    - configuration
+    - systemd
+    - systemd-configuration
+    - systemd-configuration-systemd-d
+
+- name: update global configuration file
+  template:
+    src: etc/systemd.j2
+    dest: /etc/systemd
+    validate: "visudo -cf %s"
+    owner: root
+    group: root
+    mode: 0440
+  tags:
+    - configuration
+    - systemd
+    - systemd-configuration
+    - systemd-configuration-systemd
