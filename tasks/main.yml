@@ -11,6 +11,10 @@
 #    - systemd
 #    - systemd-include-variables
 
+- assert:
+    that:
+      - ansible_service_mgr == 'systemd'
+
 - include: install.yml
   tags:
     - configuration
