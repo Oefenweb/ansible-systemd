@@ -8,6 +8,22 @@ systemd_default_group: root
 systemd_default_directory_mode: '0755'
 systemd_default_file_mode: '0644'
 
-systemd_etc_system_file: /etc/systemd/system.conf
-systemd_etc_system_directory: /etc/systemd/system
+systemd_default_etc_bootchart_content: ''
+systemd_default_etc_journald_content: ''
+systemd_default_etc_logind_content: ''
+systemd_default_etc_resolved_content: ''
+systemd_default_etc_system_content: ''
+systemd_default_etc_timesyncd_content: ''
+systemd_default_etc_user_content: ''
+
+systemd_etc_bootchart_file: /etc/systemd/bootchart.conf
 systemd_etc_journald_file: /etc/systemd/journald.conf
+systemd_etc_logind_file: /etc/systemd/logind.conf
+systemd_etc_resolved_file: /etc/systemd/resolved.conf
+systemd_etc_system_file: /etc/systemd/system.conf
+systemd_etc_timesyncd_file: /etc/systemd/timesyncd.conf
+systemd_etc_user_file: /etc/systemd/user.conf
+
+systemd_etc_network_directory: /etc/systemd/network
+systemd_etc_system_directory: /etc/systemd/system
+systemd_etc_user_directory: /etc/systemd/user

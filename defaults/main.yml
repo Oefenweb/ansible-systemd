@@ -1,5 +1,13 @@
 # defaults file for systemd
 ---
+systemd_etc_bootchart_content: "{{ systemd_default_etc_bootchart_content }}"
+systemd_etc_journald_content: "{{ systemd_default_etc_journald_content }}"
+systemd_etc_logind_content: "{{ systemd_default_etc_logind_content }}"
+systemd_etc_resolved_content: "{{ systemd_default_etc_resolved_content }}"
+systemd_etc_system_content: "{{ systemd_default_etc_system_content }}"
+systemd_etc_timesyncd_content: "{{ systemd_default_etc_timesyncd_content }}"
+systemd_etc_user_content: "{{ systemd_default_etc_user_content }}"
+
 systemd_service_files:
   - unit: foo
     content: |
