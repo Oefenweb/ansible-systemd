@@ -1,0 +1,29 @@
+# tasks file for systemd
+---
+- name: configure | service files | update
+  template:
+    src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.j2"
+    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service"
+    owner: "{{ item.owner | default(systemd_default_owner) }}"
+    group: "{{ item.group | default(systemd_default_group)}}"
+    mode: "{{ item.mode | default(systemd_default_file_mode) }}"
+  register: _update_service_files
+  with_items: "{{ systemd_service_files }}"
+  tags:
+    - systemd-configure-services-update
+
+- name: configure | service files | reload
+  systemd:
+    daemon_reload: true
+  when: _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
+  tags:
+    - systemd-configure-services-reload
+
+- name: configure | service files | state
+  systemd:
+    name: "{{ item.item.unit }}"
+    state: "{{ item.item.state }}"
+  with_items: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+  when: item.item.state is defined
+  tags:
+    - systemd-configure-services-state
