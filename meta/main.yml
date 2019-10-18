@@ -16,5 +16,4 @@ galaxy_info:
         - stretch
   galaxy_tags:
     - system
-    - monitoring
 dependencies: []

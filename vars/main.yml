@@ -1,4 +1,13 @@
 # vars file for systemd
 ---
 systemd_dependencies:
-  - sudo
+  - systemd
+
+systemd_default_owner: root
+systemd_default_group: root
+systemd_default_directory_mode: '0755'
+systemd_default_file_mode: '0644'
+
+systemd_etc_system_file: /etc/systemd/system.conf
+systemd_etc_system_directory: /etc/systemd/system
+systemd_etc_journald_file: /etc/systemd/journald.conf

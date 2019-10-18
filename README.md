@@ -1,6 +1,7 @@
 ## systemd
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-systemd.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-systemd) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-systemd-blue.svg)](https://galaxy.ansible.com/Oefenweb/systemd)
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-systemd.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-systemd)
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-systemd-blue.svg)](https://galaxy.ansible.com/Oefenweb/systemd)
 
 Manage systemd services in Debian-like systems.
 

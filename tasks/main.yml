@@ -1,53 +1,173 @@
 # tasks file for systemd
 ---
-- name: include variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "_{{ ansible_distribution_release }}.yml"
-    - "_{{ ansible_distribution | lower }}.yml"
-    - _default.yml
-  tags:
-    - configuration
-    - systemd
-    - systemd-include-variables
+#- name: include variables
+#  include_vars: "{{ item }}"
+#  with_first_found:
+#    - "_{{ ansible_distribution_release }}.yml"
+#    - "_{{ ansible_distribution | lower }}.yml"
+#    - _default.yml
+#  tags:
+#    - configuration
+#    - systemd
+#    - systemd-include-variables
 
-- name: install
+- name: install | install
   apt:
-    name: "{{ item }}"
+    name: "{{ systemd_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ systemd_dependencies }}"
   tags:
     - configuration
     - systemd
     - systemd-install
+    - systemd-install-install
 
-- name: update specific configuration files
-  template:
-    src: etc/systemd.d/systemd.j2
-    dest: "/etc/systemd.d/{{ item.key }}"
-    validate: "visudo -cf %s"
-    owner: root
-    group: root
-    mode: 0440
-  with_dict: "{{ systemd_systemd_d_files }}"
-  tags:
-    - configuration
-    - systemd
-    - systemd-configuration
-    - systemd-configuration-systemd-d
+# create needed directories
 
-- name: update global configuration file
-  template:
-    src: etc/systemd.j2
-    dest: /etc/systemd
-    validate: "visudo -cf %s"
-    owner: root
-    group: root
-    mode: 0440
+- name: configure | stat directories
+  stat:
+    path: "{{ item }}/"
+  register: _stat_directories
+  with_items:
+    - "{{ systemd_etc_system_file | dirname }}"
+    - "{{ systemd_etc_journald_file | dirname }}"
+    - "{{ systemd_etc_system_directory }}"
   tags:
-    - configuration
-    - systemd
-    - systemd-configuration
-    - systemd-configuration-systemd
+    - systemd-configure-directories
+    - systemd-configure-directories-stat
+
+- name: configure | create directories
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_directory_mode }}"
+  with_items: "{{ _stat_directories.results }}"
+  when: item.stat.exists == false
+  tags:
+    - systemd-configure-directories
+    - systemd-configure-directories-create
+
+# create service files
+
+- name: configure | service files | update
+  template:
+    src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.j2"
+    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service"
+    owner: "{{ item.owner | default(systemd_default_owner) }}"
+    group: "{{ item.group | default(systemd_default_group)}}"
+    mode: "{{ item.mode | default(systemd_default_file_mode) }}"
+  register: _update_service_files
+  with_items: "{{ systemd_service_files }}"
+  tags:
+    - systemd-configure
+    - systemd-configure-service-files
+    - systemd-configure-service-files-update
+
+#- name: configure | service files | reload
+#  debug:
+#    msg: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length }}"
+#  tags:
+#    - systemd-configure
+#    - systemd-configure-service
+#    - systemd-configure-service-files-reload
+
+- name: configure | service files | reload
+  systemd:
+    daemon_reload: true
+  when: _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
+  tags:
+    - systemd-configure
+    - systemd-configure-service-files
+    - systemd-configure-service-files-reload
+
+#- name: configure | service files | state
+#  debug:
+#    msg: "{{ item }}"
+#  with_items: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+#  tags:
+#    - systemd-configure
+#    - systemd-configure-service
+#    - systemd-configure-service-files-reload
+
+- name: configure | service files | state
+  systemd:
+    name: "{{ item.item.unit }}"
+    state: "{{ item.item.state }}"
+  with_items: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+  when: item.item.state is defined
+  tags:
+    - systemd-configure
+    - systemd-configure-service-files
+    - systemd-configure-service-files-state
+
+# create service.d files
+
+# create directory
+
+- name: configure | unit files | create directories
+  file:
+    path: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/"
+    state: directory
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_directory_mode }}"
+  with_items: "{{ systemd_unit_files }}"
+  tags:
+    - systemd-configure
+    - systemd-configure-unit-files
+    - systemd-configure-unit-files-directories
+    - systemd-configure-unit-files-directories-create
+
+- name: configure | unit files | update
+  template:
+    src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.d/x.conf.j2"
+    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d//{{ item.unit }}.conf"
+    owner: "{{ item.owner | default(systemd_default_owner) }}"
+    group: "{{ item.group | default(systemd_default_group)}}"
+    mode: "{{ item.mode | default(systemd_default_file_mode) }}"
+  register: _update_unit_files
+  with_items: "{{ systemd_unit_files }}"
+  tags:
+    - systemd-configure
+    - systemd-configure-unit-files
+    - systemd-configure-unit-files-update
+
+#- name: configure | unit files | reload
+#  debug:
+#    msg: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length }}"
+#  tags:
+#    - systemd-configure
+#    - systemd-configure-unit-files
+#    - systemd-configure-unit-files-reload
+
+- name: configure | unit files | reload
+  systemd:
+    daemon_reload: true
+  when: _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
+  tags:
+    - systemd-configure
+    - systemd-configure-unit-files
+    - systemd-configure-unit-files-reload
+
+#- name: configure | unit files | state
+#  debug:
+#    msg: "{{ item }}"
+#  with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+#  tags:
+#    - systemd-configure
+#    - systemd-configure-unit-files
+#    - systemd-configure-unit-files-reload
+
+- name: configure | unit files | state
+  systemd:
+    name: "{{ item.item.unit }}"
+    state: "{{ item.item.state }}"
+  with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+  when: item.item.state is defined
+  tags:
+    - systemd-configure
+    - systemd-configure-unit-files
+    - systemd-configure-unit-files-state
