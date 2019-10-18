@@ -50,8 +50,6 @@
     - systemd-configure-directories
     - systemd-configure-directories-create
 
-# create service files
-
 - name: configure | service files | update
   template:
     src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.j2"
@@ -66,14 +64,6 @@
     - systemd-configure-service-files
     - systemd-configure-service-files-update
 
-#- name: configure | service files | reload
-#  debug:
-#    msg: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length }}"
-#  tags:
-#    - systemd-configure
-#    - systemd-configure-service
-#    - systemd-configure-service-files-reload
-
 - name: configure | service files | reload
   systemd:
     daemon_reload: true
@@ -82,15 +72,6 @@
     - systemd-configure
     - systemd-configure-service-files
     - systemd-configure-service-files-reload
-
-#- name: configure | service files | state
-#  debug:
-#    msg: "{{ item }}"
-#  with_items: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
-#  tags:
-#    - systemd-configure
-#    - systemd-configure-service
-#    - systemd-configure-service-files-reload
 
 - name: configure | service files | state
   systemd:
@@ -102,10 +83,6 @@
     - systemd-configure
     - systemd-configure-service-files
     - systemd-configure-service-files-state
-
-# create service.d files
-
-# create directory
 
 - name: configure | unit files | create directories
   file:
@@ -135,14 +112,6 @@
     - systemd-configure-unit-files
     - systemd-configure-unit-files-update
 
-#- name: configure | unit files | reload
-#  debug:
-#    msg: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length }}"
-#  tags:
-#    - systemd-configure
-#    - systemd-configure-unit-files
-#    - systemd-configure-unit-files-reload
-
 - name: configure | unit files | reload
   systemd:
     daemon_reload: true
@@ -151,15 +120,6 @@
     - systemd-configure
     - systemd-configure-unit-files
     - systemd-configure-unit-files-reload
-
-#- name: configure | unit files | state
-#  debug:
-#    msg: "{{ item }}"
-#  with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
-#  tags:
-#    - systemd-configure
-#    - systemd-configure-unit-files
-#    - systemd-configure-unit-files-reload
 
 - name: configure | unit files | state
   systemd:
