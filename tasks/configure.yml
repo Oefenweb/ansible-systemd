@@ -39,7 +39,7 @@
     dest: "{{ systemd_etc_bootchart_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -51,7 +51,7 @@
     dest: "{{ systemd_etc_journald_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -63,7 +63,7 @@
     dest: "{{ systemd_etc_logind_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -75,7 +75,7 @@
     dest: "{{ systemd_etc_resolved_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -87,7 +87,7 @@
     dest: "{{ systemd_etc_system_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -99,7 +99,7 @@
     dest: "{{ systemd_etc_timesyncd_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
@@ -111,7 +111,7 @@
     dest: "{{ systemd_etc_user_file }}"
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
-    mode: "{{ systemd_default_directory_mode }}"
+    mode: "{{ systemd_default_file_mode }}"
   notify: systemctl daemon-reexec
   tags:
     - systemd-configure-update
