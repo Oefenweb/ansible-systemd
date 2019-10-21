@@ -28,7 +28,7 @@ None
     - systemd
 ```
 
-##### Complex configuration
+##### Complex configuration (memcached and mysql)
 
 ```yaml
 ---
@@ -36,6 +36,31 @@ None
   roles:
     - systemd
   vars:
+    systemd_service_files:
+      - unit: memcached
+        content: |
+          [Unit]
+          Description=Start up memcached, a high-performance memory caching daemon
+          After=network.target
+
+          [Service]
+          ExecStartPre=/usr/bin/test -x /usr/bin/memcached
+          ExecStartPre=/usr/share/memcached/scripts/start-memcached
+          ExecStartPre=/usr/bin/install -d -o memcache -g root -m 0775 /run/memcached
+          ExecStart=/usr/share/memcached/scripts/systemd-memcached-wrapper /etc/memcached.conf
+
+          [Install]
+          WantedBy=multi-user.target
+        state: reloaded
+
+    systemd_unit_files:
+      - unit: mysql
+        file: limits
+        content: |
+          [Service]
+          LimitNOFILE=infinity
+          LimitMEMLOCK=infinity
+          OOMScoreAdjust=-600
 ```
 
 #### License

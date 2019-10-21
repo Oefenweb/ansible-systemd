@@ -6,3 +6,24 @@
   roles:
     - ../../
   vars:
+    systemd_service_files:
+      - unit: foo
+        content: |
+          [Unit]
+          Description=Start up foo, a boolean daemon
+          After=network.target
+
+          [Service]
+          ExecStart=/bin/true
+
+          [Install]
+          WantedBy=multi-user.target
+
+    systemd_unit_files:
+      - unit: foo
+        file: limits
+        content: |
+          [Service]
+          LimitNOFILE=infinity
+          LimitMEMLOCK=infinity
+        state: restarted

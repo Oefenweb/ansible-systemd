@@ -8,49 +8,5 @@ systemd_etc_system_content: "{{ systemd_default_etc_system_content }}"
 systemd_etc_timesyncd_content: "{{ systemd_default_etc_timesyncd_content }}"
 systemd_etc_user_content: "{{ systemd_default_etc_user_content }}"
 
-systemd_service_files:
-  - unit: foo
-    content: |
-      [Unit]
-      Description=Start up foo, a boolean daemon
-      After=network.target
-
-      [Service]
-      ExecStart=/bin/true
-
-      [Install]
-      WantedBy=multi-user.target
-    state: reloaded
-
-#  - unit: memcached
-#    content: |
-#      [Unit]
-#      Description=Start up memcached, a high-performance memory caching daemon
-#      After=network.target
-#
-#      [Service]
-#      ExecStartPre=/usr/bin/test -x /usr/bin/memcached
-#      ExecStartPre=/usr/share/memcached/scripts/start-memcached
-#      ExecStartPre=/usr/bin/install -d -o memcache -g root -m 0775 /run/memcached
-#      ExecStart=/usr/share/memcached/scripts/systemd-memcached-wrapper /etc/memcached.conf
-#
-#      [Install]
-#      WantedBy=multi-user.target
-#    state: reloaded
-
-systemd_unit_files:
-  - unit: foo
-    file: limits
-    content: |
-      [Service]
-      LimitNOFILE=infinity
-      LimitMEMLOCK=infinity
-    state: restarted
-
-#  - unit: mysql
-#    file: limits
-#    content: |
-#      [Service]
-#      LimitNOFILE=infinity
-#      LimitMEMLOCK=infinity
-#      OOMScoreAdjust=-600
+systemd_service_files: []
+systemd_unit_files: []
