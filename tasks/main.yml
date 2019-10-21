@@ -1,40 +1,29 @@
 # tasks file for systemd
 ---
-#- name: include variables
-#  include_vars: "{{ item }}"
-#  with_first_found:
-#    - "_{{ ansible_distribution_release }}.yml"
-#    - "_{{ ansible_distribution | lower }}.yml"
-#    - _default.yml
-#  tags:
-#    - configuration
-#    - systemd
-#    - systemd-include-variables
+- block:
 
-- assert:
-    that:
-      - ansible_service_mgr == 'systemd'
+  - include: install.yml
+    tags:
+      - configuration
+      - systemd
+      - systemd-install
 
-- include: install.yml
-  tags:
-    - configuration
-    - systemd
-    - systemd-install
+  - include: configure.yml
+    tags:
+      - configuration
+      - systemd
+      - systemd-configure
 
-- include: configure.yml
-  tags:
-    - configuration
-    - systemd
-    - systemd-configure
+  - include: services.yml
+    tags:
+      - configuration
+      - systemd
+      - systemd-services
 
-- include: services.yml
-  tags:
-    - configuration
-    - systemd
-    - systemd-services
+  - include: units.yml
+    tags:
+      - configuration
+      - systemd
+      - systemd-units
 
-- include: units.yml
-  tags:
-    - configuration
-    - systemd
-    - systemd-units
+  when: ansible_service_mgr == 'systemd'
