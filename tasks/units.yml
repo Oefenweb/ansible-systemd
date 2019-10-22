@@ -36,8 +36,8 @@
 - name: configure | unit files | state
   systemd:
     name: "{{ item.item.unit }}"
-    state: "{{ item.item.state }}"
+    state: "{{ item.item.handler_state }}"
   with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
-  when: item.item.state is defined
+  when: item.item.handler_state is defined
   tags:
     - systemd-units-state

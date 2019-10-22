@@ -26,4 +26,10 @@
       - systemd
       - systemd-units
 
+  - include: check.yml
+    tags:
+      - configuration
+      - systemd
+      - systemd-check
+
   when: ansible_service_mgr == 'systemd'

@@ -1,0 +1,25 @@
+# tasks file for systemd
+---
+- name: check | enabled
+  systemd:
+    name: "{{ item.unit }}"
+    enabled: "{{ item.enabled }}"
+  with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('enabled', 'defined') | list }}"
+  tags:
+    - systemd-check-enabled
+
+- name: check | state
+  systemd:
+    name: "{{ item.unit }}"
+    state: "{{ item.state }}"
+  with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('state', 'defined') | list }}"
+  tags:
+    - systemd-check-state
+
+- name: check | masked
+  systemd:
+    name: "{{ item.unit }}"
+    masked: "{{ item.masked }}"
+  with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('masked', 'defined') | list }}"
+  tags:
+    - systemd-check-masked
