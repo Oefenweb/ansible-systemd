@@ -5,7 +5,7 @@
     src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.j2"
     dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service"
     owner: "{{ item.owner | default(systemd_default_owner) }}"
-    group: "{{ item.group | default(systemd_default_group)}}"
+    group: "{{ item.group | default(systemd_default_group) }}"
     mode: "{{ item.mode | default(systemd_default_file_mode) }}"
   register: _update_service_files
   with_items: "{{ systemd_service_files }}"

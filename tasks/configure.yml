@@ -28,7 +28,7 @@
     group: "{{ systemd_default_group }}"
     mode: "{{ systemd_default_directory_mode }}"
   with_items: "{{ _stat_directories.results }}"
-  when: item.stat.exists == false
+  when: not item.stat.exists
   tags:
     - systemd-configure-directories
     - systemd-configure-directories-create
