@@ -1,0 +1,118 @@
+# tasks file for systemd
+---
+- name: configure | stat directories
+  stat:
+    path: "{{ item }}/"
+  register: _stat_directories
+  with_items:
+    - "{{ systemd_etc_bootchart_file | dirname }}"
+    - "{{ systemd_etc_journald_file | dirname }}"
+    - "{{ systemd_etc_logind_file | dirname }}"
+    - "{{ systemd_etc_resolved_file | dirname }}"
+    - "{{ systemd_etc_system_file | dirname }}"
+    - "{{ systemd_etc_timesyncd_file | dirname }}"
+    - "{{ systemd_etc_user_file | dirname }}"
+
+    - "{{ systemd_etc_network_directory }}"
+    - "{{ systemd_etc_system_directory }}"
+    - "{{ systemd_etc_user_directory }}"
+  tags:
+    - systemd-configure-directories
+    - systemd-configure-directories-stat
+
+- name: configure | create directories
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_directory_mode }}"
+  with_items: "{{ _stat_directories.results }}"
+  when: not item.stat.exists
+  tags:
+    - systemd-configure-directories
+    - systemd-configure-directories-create
+
+- name: configure | update | bootchart
+  template:
+    src: "{{ systemd_etc_bootchart_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_bootchart_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-bootchart
+
+- name: configure | update | journald
+  template:
+    src: "{{ systemd_etc_journald_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_journald_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-journald
+
+- name: configure | update | logind
+  template:
+    src: "{{ systemd_etc_logind_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_logind_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-logind
+
+- name: configure | update | resolved
+  template:
+    src: "{{ systemd_etc_resolved_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_resolved_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-resolved
+
+- name: configure | update | system
+  template:
+    src: "{{ systemd_etc_system_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_system_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-system
+
+- name: configure | update | timesyncd
+  template:
+    src: "{{ systemd_etc_timesyncd_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_timesyncd_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-timesyncd
+
+- name: configure | update | user
+  template:
+    src: "{{ systemd_etc_user_file.lstrip('/') }}.j2"
+    dest: "{{ systemd_etc_user_file }}"
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_file_mode }}"
+  notify: systemctl daemon-reexec
+  tags:
+    - systemd-configure-update
+    - systemd-configure-update-user

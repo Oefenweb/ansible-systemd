@@ -1,0 +1,43 @@
+# tasks file for systemd
+---
+- name: configure | unit files | create directories
+  file:
+    path: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/"
+    state: directory
+    owner: "{{ systemd_default_owner }}"
+    group: "{{ systemd_default_group }}"
+    mode: "{{ systemd_default_directory_mode }}"
+  with_items: "{{ systemd_unit_files }}"
+  tags:
+    - systemd-configure
+    - systemd-configure-unit-files
+    - systemd-configure-unit-files-directories
+    - systemd-configure-unit-files-directories-create
+
+- name: configure | unit files | update
+  template:
+    src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.d/x.conf.j2"
+    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/{{ item.file }}.conf"
+    owner: "{{ item.owner | default(systemd_default_owner) }}"
+    group: "{{ item.group | default(systemd_default_group) }}"
+    mode: "{{ item.mode | default(systemd_default_file_mode) }}"
+  register: _update_unit_files
+  with_items: "{{ systemd_unit_files }}"
+  tags:
+    - systemd-units-update
+
+- name: configure | unit files | reload
+  systemd:
+    daemon_reload: true
+  when: _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
+  tags:
+    - systemd-units-reload
+
+- name: configure | unit files | state
+  systemd:
+    name: "{{ item.item.unit }}"
+    state: "{{ item.item.handler_state }}"
+  with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
+  when: item.item.handler_state is defined
+  tags:
+    - systemd-units-state

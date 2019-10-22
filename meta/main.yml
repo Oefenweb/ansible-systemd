@@ -1,0 +1,21 @@
+# meta file for systemd
+---
+galaxy_info:
+  author: Mischa ter Smitten
+  company: Oefenweb.nl B.V.
+  description: Manage systemd services in Debian-like systems
+  license: MIT
+  min_ansible_version: 2.5.0
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+  galaxy_tags:
+    - system
+    - service
+    - systemd
+dependencies: []
