@@ -17,7 +17,7 @@
 - name: configure | unit files | update
   template:
     src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.d/x.conf.j2"
-    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/{{ item.unit }}.conf"
+    dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/{{ item.file }}.conf"
     owner: "{{ item.owner | default(systemd_default_owner) }}"
     group: "{{ item.group | default(systemd_default_group)}}"
     mode: "{{ item.mode | default(systemd_default_file_mode) }}"
