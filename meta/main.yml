@@ -1,6 +1,7 @@
 # meta file for systemd
 ---
 galaxy_info:
+  role_name: systemd
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Manage systemd services in Debian-like systems
