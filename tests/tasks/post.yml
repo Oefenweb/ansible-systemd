@@ -1,9 +1,0 @@
-# pre test file for systemd
----
-- name: check open files limit
-  shell: >
-    sudo su -l {{ systemd_conf_d_file_memcached_user }} -s /bin/sh -c 'ulimit -n' | tail -1
-    | grep -q 65535
-    && (echo 'Open files limit test: pass' && exit 0)
-    || (echo 'Open files limit test: fail' && exit 1)
-  changed_when: false
