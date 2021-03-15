@@ -1,6 +1,7 @@
-# meta file for systemd
+# meta file
 ---
 galaxy_info:
+  namespace: oefenweb
   role_name: systemd
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.

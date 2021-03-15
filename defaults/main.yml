@@ -1,4 +1,4 @@
-# defaults file for systemd
+# defaults file
 ---
 systemd_etc_bootchart_content: "{{ systemd_default_etc_bootchart_content }}"
 systemd_etc_journald_content: "{{ systemd_default_etc_journald_content }}"

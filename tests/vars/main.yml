@@ -1,4 +1,4 @@
-# vars file for systemd
+# vars file
 ---
 systemd_service_files:
   - unit: lorem

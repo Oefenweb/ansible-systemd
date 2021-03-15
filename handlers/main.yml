@@ -1,4 +1,4 @@
-# handlers file for systemd
+# handlers file
 ---
 - name: systemctl daemon-reexec
   command: systemctl daemon-reexec
