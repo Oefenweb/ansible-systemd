@@ -5,3 +5,9 @@
   # TODO: Use below (since 2.8)
   # systemd:
   #  daemon_reexec: true
+
+- name: restart systemd-resolved
+  service:
+    name: systemd-resolved
+    state: restarted
+  when: service_default_state | default('started') == 'started'

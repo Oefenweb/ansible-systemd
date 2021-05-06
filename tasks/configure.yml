@@ -76,7 +76,9 @@
     owner: "{{ systemd_default_owner }}"
     group: "{{ systemd_default_group }}"
     mode: "{{ systemd_default_file_mode }}"
-  notify: systemctl daemon-reexec
+  notify:
+    - systemctl daemon-reexec
+    - restart systemd-resolved
   tags:
     - systemd-configure-update
     - systemd-configure-update-resolved
