@@ -1,7 +1,8 @@
 # handlers file
 ---
 - name: systemctl daemon-reexec
-  command: systemctl daemon-reexec
+  command: >
+    systemctl daemon-reexec
   # TODO: Use below (since 2.8)
   # systemd:
   #  daemon_reexec: true
