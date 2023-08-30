@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: configure | service files | update
-  template:
+  ansible.builtin.template:
     src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.j2"
     dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service"
     owner: "{{ item.owner | default(systemd_default_owner) }}"
@@ -13,14 +13,14 @@
     - systemd-configure-services-update
 
 - name: configure | service files | reload
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
   when: _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
   tags:
     - systemd-configure-services-reload
 
 - name: configure | service files | state
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.item.unit }}"
     state: "{{ item.item.handler_state }}"
   with_items: "{{ _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"

@@ -1,14 +1,15 @@
 # handlers file
 ---
-- name: systemctl daemon-reexec
-  command: >
+- name: systemctl daemon-reexec  # noqa command-instead-of-module
+  ansible.builtin.command: >
     systemctl daemon-reexec
   # TODO: Use below (since 2.8)
-  # systemd:
+  # ansible.builtin.systemd:
   #  daemon_reexec: true
+  changed_when: true
 
 - name: restart systemd-resolved
-  service:
+  ansible.builtin.service:
     name: systemd-resolved
     state: restarted
   when: service_default_state | default('started') == 'started'

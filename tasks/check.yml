@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: check | enabled
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.unit }}"
     enabled: "{{ item.enabled }}"
   with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('enabled', 'defined') | list }}"
@@ -9,7 +9,7 @@
     - systemd-check-enabled
 
 - name: check | state
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.unit }}"
     state: "{{ item.state }}"
   with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('state', 'defined') | list }}"
@@ -17,7 +17,7 @@
     - systemd-check-state
 
 - name: check | masked
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.unit }}"
     masked: "{{ item.masked }}"
   with_items: "{{ (systemd_service_files + systemd_unit_files) | selectattr('masked', 'defined') | list }}"

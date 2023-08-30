@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: configure | unit files | create directories
-  file:
+  ansible.builtin.file:
     path: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/"
     state: directory
     owner: "{{ systemd_default_owner }}"
@@ -15,7 +15,7 @@
     - systemd-configure-unit-files-directories-create
 
 - name: configure | unit files | update
-  template:
+  ansible.builtin.template:
     src: "{{ systemd_etc_system_directory.lstrip('/') }}/x.service.d/x.conf.j2"
     dest: "{{ systemd_etc_system_directory }}/{{ item.unit }}.service.d/{{ item.file }}.conf"
     owner: "{{ item.owner | default(systemd_default_owner) }}"
@@ -27,14 +27,14 @@
     - systemd-units-update
 
 - name: configure | unit files | reload
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
   when: _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
   tags:
     - systemd-units-reload
 
 - name: configure | unit files | state
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.item.unit }}"
     state: "{{ item.item.handler_state }}"
   with_items: "{{ _update_unit_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list }}"
