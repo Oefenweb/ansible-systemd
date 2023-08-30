@@ -3,37 +3,37 @@
 - name: service mgr
   when: ansible_service_mgr == 'systemd'
   block:
-  - name: install
-    ansible.builtin.import_tasks: install.yml
-    tags:
-      - configuration
-      - systemd
-      - systemd-install
+    - name: install
+      ansible.builtin.import_tasks: install.yml
+      tags:
+        - configuration
+        - systemd
+        - systemd-install
 
-  - name: configure
-    ansible.builtin.import_tasks: configure.yml
-    tags:
-      - configuration
-      - systemd
-      - systemd-configure
+    - name: configure
+      ansible.builtin.import_tasks: configure.yml
+      tags:
+        - configuration
+        - systemd
+        - systemd-configure
 
-  - name: services
-    ansible.builtin.import_tasks: services.yml
-    tags:
-      - configuration
-      - systemd
-      - systemd-services
+    - name: services
+      ansible.builtin.import_tasks: services.yml
+      tags:
+        - configuration
+        - systemd
+        - systemd-services
 
-  - name: units
-    ansible.builtin.import_tasks: units.yml
-    tags:
-      - configuration
-      - systemd
-      - systemd-units
+    - name: units
+      ansible.builtin.import_tasks: units.yml
+      tags:
+        - configuration
+        - systemd
+        - systemd-units
 
-  - name: check
-    ansible.builtin.import_tasks: check.yml
-    tags:
-      - configuration
-      - systemd
-      - systemd-check
+    - name: check
+      ansible.builtin.import_tasks: check.yml
+      tags:
+        - configuration
+        - systemd
+        - systemd-check
