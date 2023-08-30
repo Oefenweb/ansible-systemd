@@ -54,7 +54,7 @@ systemd_service_files:
 
 systemd_unit_files:
   - unit: lorem
-    file: limits
+    ansible.builtin.file: limits
     content: |
       [Service]
       LimitNOFILE=infinity

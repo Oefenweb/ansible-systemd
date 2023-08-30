@@ -1,35 +1,39 @@
 # tasks file
 ---
-- block:
-
-  - include: install.yml
+- name: service mgr
+  when: ansible_service_mgr == 'systemd'
+  block:
+  - name: install
+    ansible.builtin.import_tasks: install.yml
     tags:
       - configuration
       - systemd
       - systemd-install
 
-  - include: configure.yml
+  - name: configure
+    ansible.builtin.import_tasks: configure.yml
     tags:
       - configuration
       - systemd
       - systemd-configure
 
-  - include: services.yml
+  - name: services
+    ansible.builtin.import_tasks: services.yml
     tags:
       - configuration
       - systemd
       - systemd-services
 
-  - include: units.yml
+  - name: units
+    ansible.builtin.import_tasks: units.yml
     tags:
       - configuration
       - systemd
       - systemd-units
 
-  - include: check.yml
+  - name: check
+    ansible.builtin.import_tasks: check.yml
     tags:
       - configuration
       - systemd
       - systemd-check
-
-  when: ansible_service_mgr == 'systemd'
