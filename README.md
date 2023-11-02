@@ -48,7 +48,7 @@ None
 ---
 - hosts: all
   roles:
-    - systemd
+    - oefenweb.systemd
 ```
 
 ##### Complex configuration (memcached and mysql)
@@ -57,7 +57,7 @@ None
 ---
 - hosts: all
   roles:
-    - systemd
+    - oefenweb.systemd
   vars:
     systemd_service_files:
       - unit: memcached
