@@ -78,6 +78,7 @@
     mode: "{{ systemd_default_file_mode }}"
   notify:
     - systemctl daemon-reexec
+    - systemctl daemon-reload
     - restart systemd-resolved
   tags:
     - systemd-configure-update
