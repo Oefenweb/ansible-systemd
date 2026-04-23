@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: service mgr
-  when: ansible_service_mgr == 'systemd'
+  when: ansible_facts['service_mgr'] == 'systemd'
   block:
     - name: install
       ansible.builtin.import_tasks: install.yml

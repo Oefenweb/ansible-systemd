@@ -15,7 +15,7 @@
 - name: configure | service files | reload
   ansible.builtin.systemd:
     daemon_reload: true
-  when: _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length
+  when: _update_service_files.results | selectattr('changed', 'defined') | selectattr('changed', 'equalto', true) | list | length > 0
   tags:
     - systemd-configure-services-reload
 
