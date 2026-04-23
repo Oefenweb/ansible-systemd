@@ -8,3 +8,14 @@
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
   tags:
     - systemd-install-install
+
+- name: install | install | systemd-resolved
+  ansible.builtin.apt:
+    name:
+      - systemd-resolved
+    state: "{{ apt_install_state | default('latest') }}"
+  when: >
+    (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] is version('24.04', '>=')) or
+    (ansible_facts['distribution'] == 'Debian' and ansible_facts['distribution_major_version'] is version('12', '>='))
+  tags:
+    - systemd-install-install
