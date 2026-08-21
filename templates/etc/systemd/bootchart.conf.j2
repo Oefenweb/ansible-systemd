@@ -1,4 +1,4 @@
-; {{ ansible_managed }}
+{{ ansible_managed | comment(decoration='; ') }}
 
 [Bootchart]
 {{ systemd_etc_bootchart_content }}
