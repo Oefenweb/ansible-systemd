@@ -1,4 +1,4 @@
-; {{ ansible_managed }}
+{{ ansible_managed | comment(decoration='; ') }}
 
 [Resolve]
 {{ systemd_etc_resolved_content }}

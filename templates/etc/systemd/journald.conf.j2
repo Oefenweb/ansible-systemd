@@ -1,4 +1,4 @@
-; {{ ansible_managed }}
+{{ ansible_managed | comment(decoration='; ') }}
 
 [Journal]
 {{ systemd_etc_journald_content }}

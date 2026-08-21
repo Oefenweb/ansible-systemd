@@ -1,4 +1,4 @@
-; {{ ansible_managed }}
+{{ ansible_managed | comment(decoration='; ') }}
 
 [Manager]
 {{ systemd_etc_user_content }}
